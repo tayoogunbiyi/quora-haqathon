@@ -2,8 +2,6 @@ from collections import namedtuple
 import math
 from typing import List, Tuple
 
-Point = namedtuple("Point", ["x", "y"])
-
 
 class Point:
     def __init__(self, x: float, y: float):
