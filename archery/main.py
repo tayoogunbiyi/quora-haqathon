@@ -1,5 +1,5 @@
 from collections import namedtuple
-import io, os
+import math
 from typing import List, Tuple
 
 Point = namedtuple("Point", ["x", "y"])
@@ -16,8 +16,11 @@ class Point:
     def __repr__(self) -> str:
         return self.__str__()
 
+    def distance_to_origin(self) -> float:
+        return math.sqrt(self.x * self.x + self.y * self.y)
+
     def __lt__(self, other):
-        return (self.x, self.y) < (other.x, other.y)
+        return self.distance_to_origin() < other.distance_to_origin()
 
 
 class Line:
@@ -99,36 +102,38 @@ def count_Qs_fast(circles: List[Circle], lines: List[Line]):
     result = 0
     circles.sort()
     for line in lines:
-        lower_point = min(line.p1, line.p2)
-        higher_point = max(line.p1, line.p2)
-        # print("lower point ->", losigher_point)
-        # count circles between lower_point and higher_point
+        lower_point, higher_point = sorted([line.p1, line.p2])
+        lo, hi = 0, len(circles) - 1
+        while lo < hi:
+            mid = lo + ((hi - lo) // 2)
+            current_circle = circles[mid]
+            if current_circle.contains_point(lower_point):
+                hi = mid
+            else:
+                lo = mid + 1
 
-        # lo, hi = 0, len(circles) - 1
-        # while lo < hi:
-        #     mid = lo + ((hi - lo) // 2)
-        #     current_circle = circles[mid]
-        #     if current_circle.contains_point(lower_point):
-        #         hi = mid
-        #     else:
-        #         lo = mid + 1
-        # lower_bound = hi
+        innermost_idx = lo
 
-        # lo, hi = 0, len(circles) - 1
-        # while lo < hi:
-        #     mid = lo + ((hi - lo) // 2)
-        #     current_circle = circles[mid]
-        #     if current_circle.contains_point(higher_point):
-        #         hi = mid
-        #     else:
-        #         lo = mid + 1
+        lo, hi = 0, len(circles) - 1
+        outtermost_idx = -1
 
-        # upper_bound = hi
-        # result += upper_bound - lower_bound + 1 if upper_bound != lower_bound else 0
+        while lo <= hi:
+            mid = lo + ((hi - lo) // 2)
+            current_circle = circles[mid]
+            if current_circle.contains_point(higher_point):
+                hi = mid - 1
+            else:
+                outtermost_idx = mid
+                lo = mid + 1
+
+        if not (
+            circles[innermost_idx].radius < line.p1.distance_to_origin()
+            and circles[outtermost_idx].radius < line.p2.distance_to_origin()
+        ):
+            result += outtermost_idx - innermost_idx + 1
 
     return result
 
 
 circles, lines = read_input()
-print(count_Qs(circles, lines))
 print(count_Qs_fast(circles, lines))
