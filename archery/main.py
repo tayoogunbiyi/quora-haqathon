@@ -43,7 +43,7 @@ class Circle:
         self.x_origin = x_origin
         self.y_origin = y_origin
 
-    def __lt__(self, other_circle):
+    def __lt__(self, other_circle) -> bool:
         return self.radius < other_circle.radius
 
     def contains_point(self, point: Point) -> bool:
@@ -85,7 +85,7 @@ def read_input() -> Tuple[List[Circle], List[Line]]:
     return circles, lines
 
 
-def count_Qs(circles: List[Circle], lines: List[Line]):
+def count_Qs(circles: List[Circle], lines: List[Line]) -> int:
     result = 0
     for line in lines:
         for circle in circles:
@@ -98,7 +98,7 @@ def count_Qs(circles: List[Circle], lines: List[Line]):
     return result
 
 
-def count_Qs_fast(circles: List[Circle], lines: List[Line]):
+def count_Qs_fast(circles: List[Circle], lines: List[Line]) -> int:
     result = 0
     circles.sort()
 
