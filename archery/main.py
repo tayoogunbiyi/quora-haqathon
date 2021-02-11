@@ -101,8 +101,10 @@ def count_Qs(circles: List[Circle], lines: List[Line]):
 def count_Qs_fast(circles: List[Circle], lines: List[Line]):
     result = 0
     circles.sort()
+
     for line in lines:
         lower_point, higher_point = sorted([line.p1, line.p2])
+
         lo, hi = 0, len(circles) - 1
         while lo < hi:
             mid = lo + ((hi - lo) // 2)
@@ -114,9 +116,8 @@ def count_Qs_fast(circles: List[Circle], lines: List[Line]):
 
         innermost_idx = lo
 
-        lo, hi = 0, len(circles) - 1
         outtermost_idx = -1
-
+        lo, hi = 0, len(circles) - 1
         while lo <= hi:
             mid = lo + ((hi - lo) // 2)
             current_circle = circles[mid]
@@ -126,9 +127,10 @@ def count_Qs_fast(circles: List[Circle], lines: List[Line]):
                 outtermost_idx = mid
                 lo = mid + 1
 
-        if not (
-            circles[innermost_idx].radius < line.p1.distance_to_origin()
-            and circles[outtermost_idx].radius < line.p2.distance_to_origin()
+        # all circles which are closer to the origin than both p1 and p2 have been intersected twice and thus should not be added
+        if (
+            circles[innermost_idx].radius >= line.p1.distance_to_origin()
+            or circles[outtermost_idx].radius >= line.p2.distance_to_origin()
         ):
             result += outtermost_idx - innermost_idx + 1
 
