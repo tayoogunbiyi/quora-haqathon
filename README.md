@@ -4,7 +4,7 @@
 
 - [x] [Archery](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Archery)
 - [x] [Schedule](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Schedule)
-- [ ] [Upvotes](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Upvotes)
+- [x] [Upvotes](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Upvotes)
 - [ ] [Related Questions](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Related-Questions)
 - [ ] [Ontology](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Ontology)
 - [ ] [Wombats](https://www.quora.com/q/quorahaqathon/Quora-Haqathon-Wombats)
