@@ -1,7 +1,7 @@
 from typing import List,Tuple
 
 from trie import Trie
-from tree import TreeNode,parse_topics_into_tree
+from tree import TreeNode, find_all_related_topics,parse_topics_into_tree
 
 class Question:
     def __init__(self,topic,text):
@@ -56,4 +56,12 @@ for question in questions:
     t.insert(question.text,question.topic)
     
 for q in queries:
-    print(t.countQuestionsWithPrefixAndTopic(q.text,q.topic))
+    topic_map, count = t.countQuestionsWithPrefixAndTopic(q.text,q.topic)
+    related_topics = set([v.val for v in find_all_related_topics(topic_root,q.topic)])
+    ans = 0
+    for k in topic_map:
+        if k in related_topics:
+            ans += topic_map[k]
+    
+    print(ans)
+

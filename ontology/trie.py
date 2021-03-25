@@ -1,6 +1,5 @@
 import collections
 
-
 class TrieNode:
     def __init__(self):
         self.is_end = False
@@ -49,12 +48,13 @@ class Trie:
         root = self.root
         for ch in prefix:
             if ch not in root.node_map:
-                return 0
+                return {},0
             root = root.node_map[ch]
         # print(f"prefix = {prefix}, root.count = {root.count}, root.topic_map = {root.topic_map}")
+        # print(root.topic_map)
         result = root.count
         if root.is_end:
             result += 1
-        return result
+        return root.topic_map,result
        
 

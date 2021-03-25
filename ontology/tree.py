@@ -5,6 +5,10 @@ class TreeNode:
     def __init__(self,val):
         self.val: str = val
         self.children: List[TreeNode] = []
+    def __str__(self) -> str:
+        return self.val
+    def __repr__(self) -> str:
+        return self.val
         
 
 def parse_topics_into_tree_util(topic_list: List[str],processed: set) -> List[TreeNode]:
@@ -40,3 +44,26 @@ def parse_topics_into_tree(topics: str) -> TreeNode:
     for child_topic in parse_topics_into_tree_util(topic_list[2:-1],processed):
         root.children.append(child_topic)
     return root
+
+def find_topic_node(root: TreeNode,topic: str) -> TreeNode:
+    if root.val == topic:
+        return root
+    for child in root.children:
+        if find_topic_node(child,topic) is not None:
+            return child
+    return None
+
+
+def find_all_related_topics(root: TreeNode, topic: str) -> List[TreeNode]:
+    topic_node = find_topic_node(root,topic)
+    related_topics = []
+    if topic_node:
+        queue = [topic_node]
+        while len(queue) > 0:
+            current_node = queue.pop(0)
+            for child in current_node.children:
+                queue.append(child)
+            related_topics.append(current_node)
+
+    return related_topics
+    
