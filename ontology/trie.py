@@ -2,59 +2,44 @@ import collections
 
 class TrieNode:
     def __init__(self):
-        self.is_end = False
-        self.node_map = collections.defaultdict()
-        self.count = 0
-        self.topic_map = collections.Counter()
-        
+        self.is_word = False
+        self.children = collections.defaultdict()
+        self.number_of_descendant_words = 0
+
 class Trie:
     def __init__(self):
         self.root = TrieNode()
 
-    def insert(self, word: str,topic: str) -> None:
-        root = self.root
-        for i in range(len(word)):
-            root.topic_map[topic]+=1
-            root.count += 1
-            if word[i] not in root.node_map:
-                root.node_map[word[i]] = TrieNode()
-            root = root.node_map[word[i]]
-        root.is_end = True
-        
+    def insert(self, word: str):
+        word = word.lower()
 
-    def search(self, word: str) -> bool:
         root = self.root
         for ch in word:
-            if ch not in root.node_map:
-                return False
-            root = root.node_map[ch]
+            ch = ch.lower()
+            root.number_of_descendant_words += 1
+            if ch not in root.children:
+                root.children[ch] = TrieNode()
+            root = root.children[ch]
+        root.is_word = True
         
-        return root.is_end
-        
-
-    def startsWith(self, prefix: str) -> bool:
+    def contains(self, word: str) -> bool:
         root = self.root
-        for ch in prefix:
-            if ch not in root.node_map:
+        for ch in word:
+            ch = ch.lower()
+            if ch not in root.children:
                 return False
-            root = root.node_map[ch]
-        # c = root.count
-        # if root.is_end:
-        #     c+=1
-        # print(prefix,c)
-        return True
+            root = root.children[ch]
+        return root.is_word
     
-    def countQuestionsWithPrefixAndTopic(self,prefix: str, topic: str) -> int:
+    def count_words_starting_with(self,prefix: str) -> int:
         root = self.root
         for ch in prefix:
-            if ch not in root.node_map:
-                return {},0
-            root = root.node_map[ch]
-        # print(f"prefix = {prefix}, root.count = {root.count}, root.topic_map = {root.topic_map}")
-        # print(root.topic_map)
-        result = root.count
-        if root.is_end:
+            ch = ch.lower()
+            if ch not in root.children:
+                return 0
+            root = root.children[ch]
+        
+        result = root.number_of_descendant_words
+        if root.is_word:
             result += 1
-        return root.topic_map,result
-       
-
+        return result
