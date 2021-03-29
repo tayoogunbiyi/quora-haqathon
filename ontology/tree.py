@@ -1,4 +1,5 @@
 from typing import List
+from collections import deque
 
 class TreeNode:
     def __init__(self,value):
@@ -52,3 +53,23 @@ def parse_topics_into_tree(topics: str) -> TreeNode:
     for child_topic in parse_topics_into_tree_util(topic_list[2:-1],processed):
         root.children.append(child_topic)
     return root
+
+
+def find_all_nodes_of_subtree(root: TreeNode) -> List[TreeNode]:
+    result = []
+    Q = deque([root])
+    while len(Q) > 0:
+        current_node = Q.popleft()
+        result.append(current_node)
+        for child in current_node.children:
+            Q.append(child)
+    return result
+
+def find_node_with_value(root: TreeNode, value: str) -> TreeNode:
+    if root.value == value:
+        return root
+    for child in root.children:
+        result = find_node_with_value(child,value)
+        if result:
+            return result
+    return None
