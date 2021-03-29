@@ -1,7 +1,7 @@
 from typing import List,Tuple
-
+import collections
 from trie import Trie
-from tree import TreeNode, find_all_related_topics,parse_topics_into_tree
+from tree import TreeNode, find_all_nodes_of_subtree,parse_topics_into_tree,find_node_with_value
 
 class Question:
     def __init__(self,topic,text):
@@ -51,17 +51,21 @@ def read_input() -> Tuple[TreeNode,List[Question],List[Query]]:
 
 topic_root,questions, queries = read_input()
 
-t = Trie()
+topic_to_trie_map = collections.defaultdict(Trie)
+
 for question in questions:
-    t.insert(question.text,question.topic)
+    if question.topic not in topic_to_trie_map:
+        topic_to_trie_map[question.topic] = Trie()
+    
+    trie = topic_to_trie_map[question.topic]
+    trie.insert(question.text)
     
 for q in queries:
-    topic_map, count = t.countQuestionsWithPrefixAndTopic(q.text,q.topic)
-    related_topics = set([v.val for v in find_all_related_topics(topic_root,q.topic)])
-    ans = 0
-    for k in topic_map:
-        if k in related_topics:
-            ans += topic_map[k]
+    topic = q.topic
+    current_topic_root = find_node_with_value(topic_root,topic)
+    nodes_of_interest = find_all_nodes_of_subtree(current_topic_root)
+    result = 0
+    for node in nodes_of_interest:
+        result += topic_to_trie_map[node.value].count_words_starting_with(q.text)
     
-    print(ans)
-
+    print(result)
