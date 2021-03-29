@@ -45,9 +45,13 @@ class TreeParsingTest(unittest.TestCase):
         s = "Animals ( Reptiles Birds ( Eagles Pigeons Crows ) )"
         result = parse_topics_into_tree(s)
         self.assertEqual(s,result.serialize())
+        s = "SSZSL ( SZSSjSSSj ( S ( SSjSSSS ( SSS ( j ( SSSSSjSS ) SSSjS SSSaSS ) ) ZSS Sj SSSjSSZSS Sjj ) SSSS ( jpSjSSS ( jSjSSZSSS ( Smj ) ) ) ) SSSSS ( SSSSSSpS ) SS )"
+        
+        result = parse_topics_into_tree(s)
+        self.assertEqual(s,result.serialize())
     
     def test_parse_string_with_deeply_nested_children(self):
-        s = "A ( B ( C ( D ( E ( F ) ) ) ) )"
+        s = "A ( B ( C ( D ) ) E F )"
         result = parse_topics_into_tree(s)
         self.assertEqual(s,result.serialize())
     

@@ -32,7 +32,17 @@ def parse_topics_into_tree_util(topic_list: List[str],processed: set) -> List[Tr
             processed.add(topic_list[i])
             next_node = TreeNode(topic_list[i])
             if has_children_topics(i):
-                next_node.children = parse_topics_into_tree_util(topic_list[i+2:-1],processed)
+                start_idx = i+2
+                net = 1
+                for j in range(start_idx+1,len(topic_list)):
+                    if topic_list[j] == "(":
+                        net += 1
+                    elif topic_list[j] == ")":
+                        net -= 1
+                    if net == 0:
+                        end_idx = j
+                        break
+                next_node.children = parse_topics_into_tree_util(topic_list[start_idx:end_idx],processed)
             res.append(next_node)
     return res
 
